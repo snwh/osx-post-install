@@ -33,6 +33,7 @@ dir="$(dirname "$0")"
 . $dir/functions/dock
 . $dir/functions/finder
 . $dir/functions/install
+. $dir/functions/misc
 . $dir/functions/screenshots
 . $dir/functions/terminal
 
