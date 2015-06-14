@@ -21,10 +21,10 @@ function misc {
     if [[ $REPLY =~ ^([yY][eE][sS]|[yY])$ ]]; then
         echo "Which level of font smoothing would you prefer?"
         echo ""
-        echo "1. Light?"
-        echo "2. Medium?"
-        echo "3. Strong?"
-        echo "4. Or disable it completely?"
+        echo "1. Light."
+        echo "2. Medium."
+        echo "3. Strong."
+        echo "4. Disable it completely."
         echo ""
         read CHOICE
         case $CHOICE in
@@ -32,6 +32,30 @@ function misc {
             2) defaults write -g AppleFontSmoothing -int 2 ;;
             3) defaults write -g AppleFontSmoothing -int 3 ;;
             4) defaults write -g AppleFontSmoothing -int 0 ;;
+            * ) '\aError. Not an option, start again.' && misc ;;
+        esac
+        show_success 'Done.'
+        show_info 'You may need to log out for some changes to take effect.'
+    elif [[ $REPLY =~ ^([nN][oO]|[nN])$ ]]; then
+        bold "Okay, continuing..."
+    else
+        echo "" && show_error 'You may have mistyped, try again.' && misc
+    fi
+    # Dashboard
+    show_question "Would you like to configure the Dashboard? (Y)es, (N)o "
+    read REPLY
+    if [[ $REPLY =~ ^([yY][eE][sS]|[yY])$ ]]; then
+        echo "How would you like to use the Dashboard?"
+        echo ""
+        echo "1. As a Space in Mission Control."
+        echo "2. As an Overlay."
+        echo "3. It's useless. Disable it."
+        echo ""
+        read CHOICE
+        case $CHOICE in
+            1) defaults write com.apple.dashboard enabled-state -int 2 ;;
+            2) defaults write com.apple.dashboard enabled-state -int 3 ;;
+            3) defaults write com.apple.dashboard enabled-state -int 1 ;;
             * ) '\aError. Not an option, start again.' && misc ;;
         esac
         show_success 'Done.'
