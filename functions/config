@@ -10,8 +10,8 @@ echo ""
 echo "1. Configure Dock settings?"
 echo "2. Configure Finder settings?"
 echo "3. Configure Terminal settings?"
-echo "4. Set screenshot location?"
-echo "5. Configure default settings?"
+echo "4. Configure default location for screenshots?"
+echo "5. Configure other settings?"
 echo "r. Return"
 echo ""
 show_question 'Enter your choice:' && read REPLY
@@ -25,20 +25,7 @@ case $REPLY in
 # Screenshots
 4) echo "" && screenshots;;
 # Defaults
-5)  
-    show_info 'Configuring default settings...'
-    # DS Store
-    echo "Disabling the creation of '.DS_Store' files on network drives..."
-    defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
-    bold 'Done.'
-    # Font Smoothing
-    echo "Configuring Font Smoothing..."
-    defaults write -g AppleFontSmoothing -int 0
-    bold 'Done.'
-    show_info 'You may need to log out for some changes to take effect.'
-    # Done 
-    show_success 'Done.' && config
-    ;;
+5) echo "" && misc;;
 # Return
 [Rr]*) clear && main;;
 # Invalid choice

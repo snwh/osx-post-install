@@ -35,7 +35,7 @@ function dock {
         echo "" && show_error 'You may have mistyped, try again.' && dock
     fi
     # Minimize to application
-    show_question "Enable minimize-to-application? (Y)es, (N)o "
+    show_question "Enable minimizing to application icons? (Y)es, (N)o "
     read REPLY
     if [[ $REPLY =~ ^([yY][eE][sS]|[yY])$ ]]; then
         defaults write com.apple.dock minimize-to-application -bool true

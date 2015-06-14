@@ -3,7 +3,7 @@
 dir="$(dirname "$0")"
 
 function screenshots {
-show_info 'Configuring screenshots location...'
+show_info 'Configuring default location for screenshots...'
 echo ""
 show_question 'Where do you want screenshots to be stored? '
 echo ""
