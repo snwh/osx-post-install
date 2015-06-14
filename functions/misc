@@ -1,0 +1,47 @@
+ #!/bin/bash
+
+dir="$(dirname "$0")"
+
+function misc {
+    show_info 'Configuring default settings...'
+    # DS Stores
+    show_question "Disable the creation of '.DS_Store' files on network drives? (Y)es, (N)o "
+    read REPLY
+    if [[ $REPLY =~ ^([yY][eE][sS]|[yY])$ ]]; then
+        defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
+        show_success 'Done.'
+    elif [[ $REPLY =~ ^([nN][oO]|[nN])$ ]]; then
+        bold "Okay, continuing..."
+    else
+        echo "" && show_error 'You may have mistyped, try again.' && misc
+    fi
+    # Font Smoothing
+    show_question "Would you like to configure LCD font smoothing? (Y)es, (N)o "
+    read REPLY
+    if [[ $REPLY =~ ^([yY][eE][sS]|[yY])$ ]]; then
+        echo "Which level of font smoothing would you prefer?"
+        echo ""
+        echo "1. Light?"
+        echo "2. Medium?"
+        echo "3. Strong?"
+        echo "4. Or disable it completely?"
+        echo ""
+        read CHOICE
+        case $CHOICE in
+            1) defaults write -g AppleFontSmoothing -int 1
+            2) defaults write -g AppleFontSmoothing -int 2
+            3) defaults write -g AppleFontSmoothing -int 3
+            4) defaults write -g AppleFontSmoothing -int 0
+            * ) '\aError. Not an option, start again.' && misc;;
+        esac
+        show_success 'Done.'
+    elif [[ $REPLY =~ ^([nN][oO]|[nN])$ ]]; then
+        bold "Okay, continuing..."
+    else
+        echo "" && show_error 'You may have mistyped, try again.' && misc
+    fi
+    show_info 'You may need to log out for some changes to take effect.'
+    # Done 
+    show_success 'Done.' && misc
+    ;;
+}
