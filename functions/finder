@@ -12,10 +12,9 @@ function finder {
         defaults write NSGlobalDomain AppleShowAllExtensions -bool true
         show_success 'Done.'
     elif [[ $REPLY =~ ^([nN][oO]|[nN])$ ]]; then
-        show_info "Okay, continuing..."
-        echo ""
+        bold "Okay, continuing..."
     else
-        echo "" && show_error 'You may have mistyped, try again.' && config
+        echo "" && show_error 'You may have mistyped, start again.' && finder
     fi
     # Status bar
     show_question "Display status bar in Finder by default? (Y)es, (N)o "
@@ -24,10 +23,45 @@ function finder {
         defaults write com.apple.finder ShowStatusBar -bool true
         show_success 'Done.'
     elif [[ $REPLY =~ ^([nN][oO]|[nN])$ ]]; then
-        show_info "Okay, continuing..."
-        echo ""
+        bold "Okay, continuing..."
     else
-        echo "" && show_error 'You may have mistyped, try again.' && config
+        echo "" && show_error 'You may have mistyped, start again.' && finder
+    fi
+    # Preview Pane
+    show_question "Display Preview Pane bar in Finder by default? (Y)es, (N)o "
+    read REPLY
+    if [[ $REPLY =~ ^([yY][eE][sS]|[yY])$ ]]; then
+        defaults write com.apple.finder ShowPreviewPane -bool true
+        show_success 'Done.'
+    elif [[ $REPLY =~ ^([nN][oO]|[nN])$ ]]; then
+        bold "Okay, continuing..."
+    else
+        echo "" && show_error 'You may have mistyped, start again.' && finder
+    fi
+    # Pathbat
+    show_question "Display pathbar in Finder by default? (Y)es, (N)o "
+    read REPLY
+    if [[ $REPLY =~ ^([yY][eE][sS]|[yY])$ ]]; then
+        defaults write com.apple.finder ShowPathbar -bool true
+        show_success 'Done.'
+    elif [[ $REPLY =~ ^([nN][oO]|[nN])$ ]]; then
+        bold "Okay, continuing..."
+    else
+        echo "" && show_error 'You may have mistyped, start again.' && finder
+    fi
+    # Mounted Icons on Desktop
+    show_question "Show icons for all mounted volumes on desktop? (Y)es, (N)o "
+    read REPLY
+    if [[ $REPLY =~ ^([yY][eE][sS]|[yY])$ ]]; then
+        defaults write com.apple.finder ShowHardDrivesOnDesktop -bool true
+        defaults write com.apple.finder ShowRemovableMediaOnDesktop -bool true
+        defaults write com.apple.finder ShowExternalHardDrivesOnDesktop -bool true
+        defaults write com.apple.finder ShowMountedServersOnDesktop -bool true
+        show_success 'Done.'
+    elif [[ $REPLY =~ ^([nN][oO]|[nN])$ ]]; then
+        bold "Okay, continuing..."
+    else
+        echo "" && show_error 'You may have mistyped, start again.' && finder
     fi
     # View type
     show_question "Set default view type in Finder? (Y)es, (N)o "
@@ -45,17 +79,17 @@ function finder {
             2) defaults write com.apple.Finder FXPreferredViewStyle Nlsv;; # List View
             3) defaults write com.apple.Finder FXPreferredViewStyle clmv;; # Column View
             4) defaults write com.apple.Finder FXPreferredViewStyle Flwv;; # Cover Flow View
+            * ) '\aError. Not an option, start again.' && finder;;
         esac
         show_success 'Done.'
     elif [[ $REPLY =~ ^([nN][oO]|[nN])$ ]]; then
-        show_info "Okay, continuing..."
-        echo ""
+        bold "Okay, continuing..."
     else
-        echo "" && show_error 'You may have mistyped, try again.' && config
+        echo "" && show_error 'You may have mistyped, start again.' && finder
     fi
     echo 'Restarting Finder...'
     killall Finder
     show_success 'Success.'
     # Done
-    show_success 'Done.' && config
+    show_success 'Done.' && finder
 }

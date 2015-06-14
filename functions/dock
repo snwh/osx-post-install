@@ -1,0 +1,97 @@
+#!/bin/bash
+
+dir="$(dirname "$0")"
+
+function dock {
+    show_info "Configuring Dock..."
+    echo ""
+    # Dock Icon Size
+    show_question "Set preferred icon size for items Dock? (Y)es, (N)o "
+    read REPLY
+    if [[ $REPLY =~ ^([yY][eE][sS]|[yY])$ ]]; then
+    	echo "What size of icons would you like, in pixels?"
+    	read ICON_SIZE
+    	defaults write com.apple.dock tilesize -int $ICON_SIZE
+        show_success 'Done.'
+    elif [[ $REPLY =~ ^([nN][oO]|[nN])$ ]]; then
+        bold "Okay, continuing..."
+    else
+        echo "" && show_error 'You may have mistyped, try again.' && dock
+    fi
+    # Launchpad icons Size
+    show_question "Configure icon size & layout in Launchpad? (Y)es, (N)o "
+    read REPLY
+    if [[ $REPLY =~ ^([yY][eE][sS]|[yY])$ ]]; then
+	    echo "What number of rows would you like?"
+    	read NUM_ROWS
+	    defaults write com.apple.dock springboard-rows -int $NUM_ROWS
+	    echo "What number of columns would you like?"
+    	read NUM_COLUMN
+	    defaults write com.apple.dock springboard-columns -int $NUM_COLUMN
+        show_success 'Done.'
+    elif [[ $REPLY =~ ^([nN][oO]|[nN])$ ]]; then
+        bold "Okay, continuing..."
+    else
+        echo "" && show_error 'You may have mistyped, try again.' && dock
+    fi
+    # Minimize to application
+    show_question "Enable minimize-to-application? (Y)es, (N)o "
+    read REPLY
+    if [[ $REPLY =~ ^([yY][eE][sS]|[yY])$ ]]; then
+        defaults write com.apple.dock minimize-to-application -bool true
+        show_success 'Done.'
+    elif [[ $REPLY =~ ^([nN][oO]|[nN])$ ]]; then
+        bold "Okay, continuing..."
+    else
+        echo "" && show_error 'You may have mistyped, try again.' && dock
+    fi
+    # Minimize effect
+    show_question "Would like to configure the Dock's default minimize animation? (Y)es, (N)o "
+    read REPLY
+    if [[ $REPLY =~ ^([yY][eE][sS]|[yY])$ ]]; then
+    	echo "Which effect would you prefer?"
+        echo ""
+        echo "1. Genie effect?"
+        echo "2. Scale effect?"
+        echo ""
+        read CHOICE
+        case $CHOICE in
+            1) defaults write com.apple.dock mineffect genie ;; 
+            2) defaults write com.apple.dock mineffect scale ;; 
+			* ) '\aError. Not an option, start again.' && dock;;
+        esac
+        show_success 'Done.'
+    elif [[ $REPLY =~ ^([nN][oO]|[nN])$ ]]; then
+        bold "Okay, continuing..."
+    else
+        echo "" && show_error 'You may have mistyped, try again.' && dock
+    fi
+    # Minimize effect
+    show_question "Would you like to configure the positioned of the Dock on the screen? (Y)es, (N)o "
+    read REPLY
+    if [[ $REPLY =~ ^([yY][eE][sS]|[yY])$ ]]; then
+    	echo "Where would you like the Dock to be positioned?"
+        echo ""
+        echo "1. Left?"
+        echo "2. Bottom?"
+        echo "3. Right?"
+        echo ""
+        read CHOICE
+        case $CHOICE in
+            1) defaults write com.apple.dock orientation left ;; 
+            2) defaults write com.apple.dock orientation bottom ;; 
+            3) defaults write com.apple.dock orientation right ;; 
+			* ) '\aError. Not an option, start again.' && dock;;
+        esac
+        show_success 'Done.'
+    elif [[ $REPLY =~ ^([nN][oO]|[nN])$ ]]; then
+        bold "Okay, continuing..."
+    else
+        echo "" && show_error 'You may have mistyped, try again.' && dock
+    fi
+    echo 'Restarting Dock...'
+    killall Dock
+    show_success 'Success.'
+    # Done
+    show_success 'Done.' && dock
+}

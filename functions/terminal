@@ -13,8 +13,7 @@ function terminal {
         echo "" >> $HOME/.bash_profile
         echo $(cat $PROMPT) >> $HOME/.bash_profile
     elif [[ $REPLY =~ ^([nN][oO]|[nN])$ ]]; then
-        show_info "Okay, continuing..."
-        echo ""
+        bold "Okay, continuing..."
     else
         echo "" && show_error 'You may have mistyped, try again.' && config
     fi
@@ -36,8 +35,7 @@ function terminal {
           echo -e $line >> $HOME/.bash_profile
         done
     elif [[ $REPLY =~ ^([nN][oO]|[nN])$ ]]; then
-        show_info "Okay, continuing..."
-        echo ""
+        bold "Okay, continuing..."
     else
         echo "" && show_error 'You may have mistyped, try again.' && config
     fi

@@ -3,13 +3,12 @@
 dir="$(dirname "$0")"
 
 # THIRD PARTY APPLICATIONS
-function thirdparty {
-echo ''
+function install {
 show_question 'What would you like to install? '
 echo ''
 echo '1. Xcode Command Line Tools?'
 echo '2. Homebrew?'
-echo '3. RVM?'
+echo '3. Ruby Version Manager (RVM)?'
 echo 'r. Return'
 echo ''
 show_info 'Enter your choice:' && read REPLY
@@ -26,16 +25,16 @@ case $REPLY in
     [Yy]* ) 
         echo 'Installing...'
         xcode-select --install
-        show_success 'Done.'
-        main
+        echo 'Moving on...'
+        install
         ;;
     # Negative action
     [Nn]* )
-        clear && main;;
+        clear && install;;
     # Error
     * )
         clear && show_error '\aSorry, try again.' 
-        xcode
+        install
         ;;
     esac
     ;;
@@ -44,7 +43,7 @@ case $REPLY in
     echo 'Installing Homebrew...'
     ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
     show_success 'Done.'
-    thirdparty
+    install
     ;;
 # RVM
 3)
@@ -52,13 +51,13 @@ case $REPLY in
     \curl -sSL https://get.rvm.io | bash -s stable --ruby
     source /Users/Sam/.rvm/scripts/rvm
     show_success 'Done.'
-    thirdparty
+    install
     ;;
 # Return
 [Rr]*) 
     clear && main;;
 # Invalid choice
 * ) 
-    clear && show_error '\aNot an option, try again.' && thirdparty;;
+    clear && show_error '\aNot an option, try again.' && install;;
 esac
 }

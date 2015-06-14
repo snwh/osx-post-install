@@ -30,6 +30,7 @@ clear
 dir="$(dirname "$0")"
 
 . $dir/functions/config
+. $dir/functions/dock
 . $dir/functions/finder
 . $dir/functions/install
 . $dir/functions/screenshots
@@ -67,8 +68,8 @@ bold '#----------------------------------#'
 echo ''
 show_question 'What would you like to do? '
 echo ''
-echo '1. Install command-line applications?'
-echo '2. Configure apps & tweak settings?'
+echo '1. Install command-line applications & utilities?'
+echo '2. Configure application & system settings?'
 echo 'q. Quit?'
 echo ''
 show_question 'Enter your choice :' && read REPLY
