@@ -7,21 +7,47 @@ function thirdparty {
 echo ''
 show_question 'What would you like to install? '
 echo ''
-echo '1. Homebrew?'
-echo '2. RVM?'
+echo '1. Xcode Command Line Tools?'
+echo '2. Homebrew?'
+echo '3. RVM?'
 echo 'r. Return'
 echo ''
 show_info 'Enter your choice:' && read REPLY
 case $REPLY in
-# Homebrew
+# Install Xcode Command Line Tools
 1) 
+    show_question 'Install Xcode Command Line Tools? (Y)es, (N)o :'
+    echo ''
+    show_error 'Choosing (Y)es will exit this script.'
+    echo ''
+    read REPLY
+    case $REPLY in
+    # Positive action
+    [Yy]* ) 
+        echo 'Installing...'
+        xcode-select --install
+        show_success 'Done.'
+        main
+        ;;
+    # Negative action
+    [Nn]* )
+        clear && main;;
+    # Error
+    * )
+        clear && show_error '\aSorry, try again.' 
+        xcode
+        ;;
+    esac
+    ;;
+# Homebrew
+2)
     echo 'Installing Homebrew...'
     ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
     show_success 'Done.'
     thirdparty
     ;;
 # RVM
-2)
+3)
     echo 'Installing RVM...'
     \curl -sSL https://get.rvm.io | bash -s stable --ruby
     source /Users/Sam/.rvm/scripts/rvm

@@ -31,10 +31,9 @@ dir="$(dirname "$0")"
 
 . $dir/functions/config
 . $dir/functions/finder
+. $dir/functions/install
 . $dir/functions/screenshots
 . $dir/functions/terminal
-. $dir/functions/thirdparty
-. $dir/functions/xcode
 
 #----- COLOURED MESSAGE FUNCTIONS -----#
 
@@ -68,16 +67,14 @@ bold '#----------------------------------#'
 echo ''
 show_question 'What would you like to do? '
 echo ''
-echo '1. Install third-party applications?'
-echo '2. Install Xcode Command Line Tools?'
-echo '3. Configure system?'
+echo '1. Install command-line applications?'
+echo '2. Configure apps & tweak settings?'
 echo 'q. Quit?'
 echo ''
 show_question 'Enter your choice :' && read REPLY
 case $REPLY in
-    1) echo "" && thirdparty;; # Install Third-Party Applications
-    2) echo "" && xcode;; # Install Xcode Command Line Tools
-    3) echo "" && config;; # Configure system
+    1) echo "" && install;; # Install Third-Party Applications
+    2) echo "" && config;; # Configure system
     [Qq]* ) echo '' && quit;; # Quit
     * ) clear && show_error '\aNot an option, try again.' && main;;
 esac
