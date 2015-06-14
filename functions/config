@@ -1,0 +1,59 @@
+#!/bin/bash
+
+dir="$(dirname "$0")"
+
+# CONFIG
+function config {
+echo ""
+show_question 'What would you like to do? '
+echo ""
+echo "1. Configure default settings?"
+echo "2. Configure Terminal settings?"
+echo "3. Configure Finder settings?"
+echo "4. Set screenshot location?"
+echo "r. Return"
+echo ""
+show_question 'Enter your choice:' && read REPLY
+case $REPLY in
+# Defaults
+1)  
+    show_info 'Configuring default settings...'
+    # Launchpad
+    echo "Configuring Launchpad icons..."
+    defaults write com.apple.dock springboard-rows -int 6
+    defaults write com.apple.dock springboard-columns -int 6;
+    bold 'Done.'
+    # DS Store
+    echo "Disabling the creation of '.DS_Store' files on network drives..."
+    defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
+    bold 'Done.'
+    # Font Smoothing
+    echo "Configuring Font Smoothing..."
+    defaults write -g AppleFontSmoothing -int 0
+    bold 'Done.'
+    # Desktop Icons
+    echo "Enabling desktop icons for mounted drives..."
+    defaults write com.apple.finder ShowExternalHardDrivesOnDesktop -bool true
+    bold 'Done.'
+    # Dock Icons
+    echo "Setting preferred Dock icon size (49 pixels)..."
+    defaults write com.apple.dock tilesize -int 49
+    bold 'Done.'
+    echo 'Restarting Dock...'
+    killall Dock && bold 'Success.'
+    show_info 'You may need to log out for some changes to take effect.'
+    # Done 
+    show_success 'Done.' && config
+    ;;
+# Terminal
+2) echo "" && terminal;;
+# Finder
+3) echo "" && finder;;
+# Screenshots
+4) echo "" && screenshots;;
+# Return
+[Rr]*) clear && main;;
+# Invalid choice
+* ) clear && show_error '\aNot an option, try again.' && config;;
+esac
+}

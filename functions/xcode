@@ -1,0 +1,30 @@
+#!/bin/bash
+
+dir="$(dirname "$0")"
+
+# INSTALL XCODE COMMAND LINE TOOLS
+function xcode {
+echo ''
+show_question 'Install Xcode Command Line Tools? (Y)es, (N)o :'
+echo ''
+show_error 'Choosing (Y)es will exit this script.'
+echo ''
+read REPLY
+case $REPLY in
+# Positive action
+[Yy]* ) 
+    echo 'Installing...'
+   	xcode-select --install
+    show_success 'Done.'
+    main
+    ;;
+# Negative action
+[Nn]* )
+    clear && main;;
+# Error
+* )
+    clear && show_error '\aSorry, try again.' 
+    xcode
+    ;;
+esac
+}

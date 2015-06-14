@@ -1,0 +1,101 @@
+#!/bin/bash
+
+dir="$(dirname "$0")"
+
+function screenshots {
+show_info 'Configuring screenshots location...'
+echo ""
+show_question 'Where do you want screenshots to be stored? '
+echo ""
+echo "1. Keep using the default Desktop"
+echo "2. Store in Pictures folder"
+echo "3. Store in 'Screenshots' folder within Pictures folder"
+echo "4. Custom location?"
+echo "r. Return"
+echo ""
+show_info 'Enter your choice:' && read REPLY
+case $REPLY in
+# Desktop
+1)
+	echo "Keeping location to ~/Desktop"
+	defaults write com.apple.screencapture location -string "$HOME/Desktop"
+    # Done
+    show_success 'Done.' && config
+    ;;
+# Pictures
+2)
+	echo "Setting location to ~/Pictures"
+	defaults write com.apple.screencapture location -string "$HOME/Pictures"
+    # Done
+    show_success 'Done.' && config
+    ;;
+# Pictures/Screenshots
+3)
+	echo "Setting location to ~/Pictures/Screenshots..."
+	if [ -e $HOME/Pictures/Screenshots ] ; then
+		defaults write com.apple.screencapture location -string "$HOME/Pictures/Screenshots"
+    else
+    	show_error "Folder '~/Pictures/Screenshots' does not exist."
+	    read -p 'Create it? (Y)es (N)o : ' REPLY
+	    echo ''
+	    case $REPLY in
+	    # Positive action
+	    [Yy]* ) 
+	    	echo "Creating it..."
+	    	mkdir -p $HOME/Pictures/Screenshots
+	        show_success 'Success. Carrying on...'
+			defaults write com.apple.screencapture location -string "$HOME/Pictures/Screenshots"
+	        show_success 'Done.'
+	        screenshots
+	        ;;
+	    # Negative action
+	    [Nn]* )
+	        clear && screenshots;;
+	    # Error
+	    * )
+	        echo '\aSorry try again.' && screenshots;;
+	    esac
+	fi
+    # Done
+    show_success 'Done.' && config
+    ;;
+# Custom
+4)
+    echo "Enter the custom location (in your Home Folder) that you would like to store screenshots (remember the '/' for subfolders)."
+    read SCREENSHOT_FOLDER
+	echo "Setting location to '~/$SCREENSHOT_FOLDER'..."
+	if [ -e $SCREENSHOT_FOLDER ] ; then
+		defaults write com.apple.screencapture location -string "$HOME/$SCREENSHOT_FOLDER"
+    else
+    	show_error "Folder '$SCREENSHOT_FOLDER' does not exist."
+    	read -p 'Create it? (Y)es (N)o : ' REPLY
+	    echo ''
+	    case $REPLY in
+	    # Positive action
+	    [Yy]* ) 
+	    	echo "Creating '$SCREENSHOT_FOLDER'..."
+	    	mkdir -p $SCREENSHOT_FOLDER
+	        show_success 'Success. Carrying on...'
+			defaults write com.apple.screencapture location -string "$HOME/$SCREENSHOT_FOLDER"
+	        show_success 'Done.'
+	        screenshots
+	        ;;
+	    # Negative action
+	    [Nn]* )
+	        clear && screenshots;;
+	    # Error
+	    * )
+	        echo '\aSorry try again.' && screenshots;;
+	    esac
+	fi
+    # Done
+    show_success 'Done.' && config
+    ;;
+# Return
+[Rr]*) 
+    clear && config;;
+# Invalid choice
+* ) 
+    clear && show_error '\aNot an option, try again.' && config;;
+esac
+}

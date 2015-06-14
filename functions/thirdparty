@@ -1,0 +1,38 @@
+#!/bin/bash
+
+dir="$(dirname "$0")"
+
+# THIRD PARTY APPLICATIONS
+function thirdparty {
+echo ''
+show_question 'What would you like to install? '
+echo ''
+echo '1. Homebrew?'
+echo '2. RVM?'
+echo 'r. Return'
+echo ''
+show_info 'Enter your choice:' && read REPLY
+case $REPLY in
+# Homebrew
+1) 
+    echo 'Installing Homebrew...'
+    ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+    show_success 'Done.'
+    thirdparty
+    ;;
+# RVM
+2)
+    echo 'Installing RVM...'
+    \curl -sSL https://get.rvm.io | bash -s stable --ruby
+    source /Users/Sam/.rvm/scripts/rvm
+    show_success 'Done.'
+    thirdparty
+    ;;
+# Return
+[Rr]*) 
+    clear && main;;
+# Invalid choice
+* ) 
+    clear && show_error '\aNot an option, try again.' && thirdparty;;
+esac
+}

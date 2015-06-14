@@ -1,0 +1,46 @@
+#!/bin/bash
+
+dir="$(dirname "$0")"
+
+function terminal {
+    show_info "Configuring Terminal..."
+    echo ""
+    # Prompt
+    show_question "Configure Bash prompt? (Y)es, (N)o "
+    read REPLY
+    if [[ $REPLY =~ ^([yY][eE][sS]|[yY])$ ]]; then
+        PROMPT="$dir/data/prompt"
+        echo "" >> $HOME/.bash_profile
+        echo $(cat $PROMPT) >> $HOME/.bash_profile
+    elif [[ $REPLY =~ ^([nN][oO]|[nN])$ ]]; then
+        show_info "Okay, continuing..."
+        echo ""
+    else
+        echo "" && show_error 'You may have mistyped, try again.' && config
+    fi
+    # Aliases
+    ALIASES="$dir/data/aliases"
+    show_question "Add aliases to bash_profile? (Y)es, (N)o "
+    echo ""
+    echo 'Current aliases:'
+    echo ""
+    IFS=$'\n' # make newlines the only separator
+    set -f  # disable globbing
+    for line in $(cat "$ALIASES"); do
+        echo -e "\t"$line
+    done
+    echo ''
+    read REPLY
+    if [[ $REPLY =~ ^([yY][eE][sS]|[yY])$ ]]; then
+        for line in $(cat "$ALIASES"); do
+          echo -e $line >> $HOME/.bash_profile
+        done
+    elif [[ $REPLY =~ ^([nN][oO]|[nN])$ ]]; then
+        show_info "Okay, continuing..."
+        echo ""
+    else
+        echo "" && show_error 'You may have mistyped, try again.' && config
+    fi
+    # Done
+    show_success 'Done.' && config
+}

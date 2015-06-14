@@ -1,0 +1,61 @@
+#!/bin/bash
+
+dir="$(dirname "$0")"
+
+function finder {
+    show_info "Configuring Finder..."
+    echo ""
+    # File extensions
+    show_question "Enable file extensions in Finder? (Y)es, (N)o "
+    read REPLY
+    if [[ $REPLY =~ ^([yY][eE][sS]|[yY])$ ]]; then
+        defaults write NSGlobalDomain AppleShowAllExtensions -bool true
+        show_success 'Done.'
+    elif [[ $REPLY =~ ^([nN][oO]|[nN])$ ]]; then
+        show_info "Okay, continuing..."
+        echo ""
+    else
+        echo "" && show_error 'You may have mistyped, try again.' && config
+    fi
+    # Status bar
+    show_question "Display status bar in Finder by default? (Y)es, (N)o "
+    read REPLY
+    if [[ $REPLY =~ ^([yY][eE][sS]|[yY])$ ]]; then
+        defaults write com.apple.finder ShowStatusBar -bool true
+        show_success 'Done.'
+    elif [[ $REPLY =~ ^([nN][oO]|[nN])$ ]]; then
+        show_info "Okay, continuing..."
+        echo ""
+    else
+        echo "" && show_error 'You may have mistyped, try again.' && config
+    fi
+    # View type
+    show_question "Set default view type in Finder? (Y)es, (N)o "
+    read REPLY
+    if [[ $REPLY =~ ^([yY][eE][sS]|[yY])$ ]]; then
+        echo ""
+        echo "1. Icon View?"
+        echo "2. List View?"
+        echo "3. Column View?"
+        echo "4. Cover Flow View?"
+        echo ""
+        show_info 'Pick one:' && read CHOICE
+        case $CHOICE in
+            1) defaults write com.apple.Finder FXPreferredViewStyle icnv;; # Icon View
+            2) defaults write com.apple.Finder FXPreferredViewStyle Nlsv;; # List View
+            3) defaults write com.apple.Finder FXPreferredViewStyle clmv;; # Column View
+            4) defaults write com.apple.Finder FXPreferredViewStyle Flwv;; # Cover Flow View
+        esac
+        show_success 'Done.'
+    elif [[ $REPLY =~ ^([nN][oO]|[nN])$ ]]; then
+        show_info "Okay, continuing..."
+        echo ""
+    else
+        echo "" && show_error 'You may have mistyped, try again.' && config
+    fi
+    echo 'Restarting Finder...'
+    killall Finder
+    show_success 'Success.'
+    # Done
+    show_success 'Done.' && config
+}
