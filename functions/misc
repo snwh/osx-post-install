@@ -65,5 +65,23 @@ function misc {
     else
         echo "" && show_error 'You may have mistyped, try again.' && misc
     fi
+    # Down
+    case ` sw_vers -productVersion` in
+        10.11)
+            # DS Stores
+            show_question "Group application windows in overview? (Y)es, (N)o "
+            read REPLY
+            if [[ $REPLY =~ ^([yY][eE][sS]|[yY])$ ]]; then
+                defaults write com.apple.dock expose-group-apps -bool true
+                show_success 'Done.'
+            elif [[ $REPLY =~ ^([nN][oO]|[nN])$ ]]; then
+                bold "Okay, continuing..."
+            else
+                echo "" && show_error 'You may have mistyped, try again.' && misc
+            fi
+            ;;
+        *) ;;
+    esac
+    # Done
     show_success 'Done.' && config
 }
